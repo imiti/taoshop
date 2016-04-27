@@ -21,6 +21,25 @@ class UtilD {
         ],JSON_FORCE_OBJECT);
     }
     
+    public static function getSiteDomain(){
+        $domain = \Yii::$app->request->getHostInfo();
+        preg_match("/[^\.\/]+\.[^\.\/]+$/i", $domain, $matches);
+        return isset($matches[0])?$matches[0]:$domain;
+    }
+    
+    /**
+     * 返回前台的uri
+     * @param   string  $app        执行程序
+     * @param   array   $params     参数数组
+     * @param   string  $append     附加字串
+     * @param   integer $page       页数
+     * @param   string  $keywords   搜索关键词字符串
+     * @todo 等待前台的路由确定
+     */
+    public static function build_uri($app,$params,$append='',$page=1,$keywords='',$size=0){
+        return '';
+    }
+    
     /**
      *  格式化消息 true success false fail
      **/

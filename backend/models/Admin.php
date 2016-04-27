@@ -168,7 +168,7 @@ class Admin extends ActiveRecordD implements IdentityInterface
        $this->auth_key = \Yii::$app->security->generateRandomString();
    }
     
-   /**
+   /** 
     * Generates new password reset token
     */
    public function generatePasswordResetToken(){
@@ -183,7 +183,7 @@ class Admin extends ActiveRecordD implements IdentityInterface
         $this->password_reset_token = null;
     }
     
-    public function findUserById(){
+    public function findUserById($id){
         return $this->findOne(['id'=>$id,'status'=>self::STATUS_ACTIVE]);
     }
 }

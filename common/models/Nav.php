@@ -114,7 +114,7 @@ class Nav extends ActiveRecordD
         return false;
     }
     /**
-     * 是否显示
+     * 设置是否显示
      * @param string $type
      * @param integer $id
      * @param string $val
@@ -127,5 +127,20 @@ class Nav extends ActiveRecordD
         }
         $conn = \Yii::$app->getDb();
         return $conn->createCommand("UPDATE $tablename SET show_in_nav='$val' WHERE id=$id")->execute();
+    }
+    
+    /**
+     * 判断显示
+     * @param string $type
+     * @param integer $id
+     */
+    public static function isShowInNav($type,$id){
+        if ($type == 'c'){
+            $tablename = Category::tableName();
+        } else {
+            $tablename = ArticleCat::tableName();
+        }
+        $conn = \Yii::$app->getDb();
+        return $conn->createCommand("SELECT show_in_nav FROM ".$tablename." WHERE id={$id}")->queryScalar();
     }
 }

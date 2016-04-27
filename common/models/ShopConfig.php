@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use common\component\UtilD;
 use common\component\ActiveRecordD;
+use common\component\GoogleSitemapItem;
 /**
  * This is the model class for table "{{%shop_config}}".
  *
@@ -65,7 +66,7 @@ class ShopConfig extends ActiveRecordD
     
     
     public static function getAllConfigData(){
-        return self::findBySql("SELECT id,code,value");
+        return static::findAll();
     }
     
     /**
@@ -130,5 +131,73 @@ class ShopConfig extends ActiveRecordD
     public static function clearCache(){
         $key = md5(self::CACHE_KEY."wholeVariable");
         UtilD::setCache(__CLASS__, $key, false,-1);
+    }
+    /**
+     * 从缓存中获取一条记录，无则从DB找查找
+     * @param string $code
+     * @return mixed
+     */
+    public static function loadRowData($code){
+        $key = md5(self::CACHE_KEY."_code_".$code);
+        $data = UtilD::getCache(__CLASS__, $key);
+        if (!$data){
+            $data = static::find()->where("code='{$code}'")->one();
+            if (is_null($data)) return false;
+            UtilD::setCache(__CLASS__, $key, $data);
+        }
+        return $data;
+    }
+    
+    /**
+     * 从缓存中获取字段值
+     * @param string $code
+     * @param string $field
+     * @return mixed
+     */
+    public static function loadFieldByCode($code,$field='value') {
+       $data = self::loadRowData($code);
+       if (!$data) return '';
+       return isset($data[$field])?$data[$field]:'';
+    }
+    
+    /**
+     * 更新配置文件的sitemap
+     * @param string $config
+     */
+    public static function updateConfigSitemap($config,$sm,$domain,$today){
+        if (!static::updateAll(['value'=>serialize($config)],"code='sitemap'")){
+            return false;
+        }
+        $res = Category::find()->select(['id','cat_name'])->orderBy('parent_id')->column();
+        foreach ($res as $row){
+            $smi =& new GoogleSitemapItem($domain.UtilD::build_uri('category',[$row['id']],$row['cat_name']),$today,
+                $config['category_changefreq'],$config['category_priority']
+                );
+            $sm->add_item($smi);
+        }
+        $res = ArticleCat::find()->select(['id','cat_name'])->where(['cat_type'=>1])->column();
+        foreach ($res as $row){
+            $smi =& new GoogleSitemapItem($domain.UtilD::build_uri('article_cat', ['acid'=>$row['id']],$row['cat_name']),$today,$config['category_changefreq'],$config['category_priority']);
+            $sm->add_item($smi); 
+        }
+        $res = Goods::find()->select(['id','goods_name'])->where('is_delete=0')->column();
+        foreach ($res as $row){
+            $smi =& new GoogleSitemapItem($domain . UtilD::build_uri('goods', ['gid'=>$row['id']],$row['goods_name']),$today,$config['content_changefreq'],$config['content_priority']);
+            $sm->add_item($smi);
+        }
+        //文章
+        $res = Article::find()->select(['id','title','file_url','open_type'])->where('is_open=1')->column();
+        foreach ($res as $row){
+            $article_url = $row['open_type'] != 1 ? UtilD::build_uri('article', ['aid'=>$row['id']],$row['title']) : trim($row['file_url']);
+            $smi =& new GoogleSitemapItem($domain . $article_url,$today,$config['content_changefreq'],$config['content_priority']);
+            $sm->add_item($smi);
+        }
+        $sm_file = 'sitemaps.xml';
+        if ($sm->build($sm_file)){
+            return true;
+        }
+        else{
+            
+        }
     }
 }

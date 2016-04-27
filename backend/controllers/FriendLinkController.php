@@ -112,7 +112,8 @@ class FriendLinkController extends BackendBaseController
         $link_info = FriendLink::find()
                     ->select(['id','link_name','link_url','link_logo','show_order'])
                     ->where('id='.$id)
-                    ->one()->getAttributes();
+                    ->asArray()
+                    ->one();
         
         //标记是图片还是文字连接
         if (!empty($link_info['link_logo'])) {

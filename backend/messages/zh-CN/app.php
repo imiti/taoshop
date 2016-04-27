@@ -1,7 +1,6 @@
 <?php
 return [
-    'button_submit' => '提交',
-    'button_reset'  => '重置',
+    
     'manager_center' => '管理中心',
     'shop_set' => '商城设置',
     'payment_name'=>'支付方式名称:',

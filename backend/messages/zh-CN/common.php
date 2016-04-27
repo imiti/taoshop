@@ -18,7 +18,11 @@ return [
     'add_error' => '添加失败',
     'go_back'=>'返回',
     'attradd_succed'=> '操作成功',
+    'attradd_error' => '操作失败',
     'continue_add'=>'继续添加',
     'back_list' => '返回列表',
     'edit' => '修改',
+    'req_null_empty' => '请求参数不合法',
+    'button_submit' => '提交',
+    'button_reset'  => '重置',
 ];

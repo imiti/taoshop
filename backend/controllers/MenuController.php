@@ -50,6 +50,12 @@ class MenuController extends BackendBaseController
                         'icon' => 'icon-sys',
                         'url' => Url::to('/navigator/list')
                         ],
+                        [
+                        'menuid' =>'007',
+                        'menuname'=>'站点地图',
+                        'icon' => 'icon-sys',
+                        'url' => Url::to('/sitemap/index')
+                        ],
                     ] 
                 ],
                 [

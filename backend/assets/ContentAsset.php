@@ -18,10 +18,11 @@ class ContentAsset extends AssetBundle
         'easyui/jquery.easyui.min.js',
         'easyui/plugins/jquery.datagrid.js',
         'js/layout.js',
+        'easyui/plugins/jquery.edatagrid.js',
         'easyui/locale/easyui-lang-zh_CN.js'
     ];
     
-    //public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
+    public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
     
     public $depends = [
          

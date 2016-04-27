@@ -126,7 +126,7 @@ function key(){
 }
 function submitForm(){
 	$('#navigator-fm').form('submit',{
-		url: '<?= Url::to('/navigator/add-post')?>',  
+		url: '<?= Url::to('/navigator/'.$act)?>',  
 		onSubmit: function(){
 			if(!$(this).form('validate')) {
 				return false;

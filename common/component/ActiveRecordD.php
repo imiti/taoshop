@@ -66,7 +66,7 @@ class ActiveRecordD extends ActiveRecord
                     $return['total'] = $count;
                     $return['rows'] = [];
                     foreach ($query as $val){
-                        $return['rows'][] = $val;
+                        $return['rows'][] = $val->getAttributes();
                     }
                 }
             }

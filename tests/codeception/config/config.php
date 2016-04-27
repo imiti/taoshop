@@ -14,13 +14,21 @@ return [
     ],
     'components' => [
         'db' => [
-            'dsn' => 'mysql:host=localhost;dbname=yii2_advanced_tests',
+            'dsn' => 'mysql:host=localhost;dbname=tao_shop',
         ],
         'mailer' => [
             'useFileTransport' => true,
         ],
         'urlManager' => [
             'showScriptName' => true,
+        ],
+        'user' => [
+            'class'=>'common\component\WebUserD',
+            'identityClass' => 'backend\models\Admin',
+            'enableAutoLogin' => true,
+            'idParam'=>'__admin',
+            'userType'=> 'admin',
+            'loginUrl' => ['admin/login'],
         ],
     ],
 ];
